@@ -20,16 +20,16 @@ class Graph():
             for u in range(self.V):
                 for v in range(self.V):
                     if (self.graphMatrix[u][v] + self.distances[source][u]) < self.distances[source][v] :
-                        #cycle detected
+                        #Negative cycle detected
                         return True 
-
+        # No Negative cycle
         return False
 
     def allPossiblePaths(self,times_limit):
-        #pending
         end=self.V-1
         start=0
         stack =[(start, [start], times_limit,[[i] for i in range(self.V)])]
+        # stack of (current vertex,path we travelled from start to this vertex, time left, matrix to not stuck in zero weight Loop)
         allVertex=set(range(self.V))
         while stack:
             (curr,path,time,curRemoveZeroLoop)=stack.pop()
@@ -58,9 +58,12 @@ def solution(times, times_limit):
     if V<3:
         return []
     maxFreeBunnies=set([])
-    if g1.bellmenford():
+    if g1.bellmenford(): 
+        # Negative cycle detected
         return range(V-2)
     else:
+        # No negative cycle
+        # Since there is no negative cycle Eventually The Door will close permanantly in finite time and we itrate to all possible path
         for freedBunnies in g1.allPossiblePaths(times_limit):
             if (len(maxFreeBunnies) < len(freedBunnies)) or ((len(maxFreeBunnies) == len(freedBunnies)) and (sum(maxFreeBunnies) > sum(freedBunnies)) ):
                 maxFreeBunnies = freedBunnies
